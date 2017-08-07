@@ -8,8 +8,10 @@
 
 namespace app\api\controller\v1;
 
-use app\api\Validate\TestValidate;
-use think\Validate;
+use app\api\Validate\IDMustBePostiveInt;
+use app\api\model\Banner as BannerModel;
+use app\lib\exception\BannerMissException;
+use think\Exception;
 
 class Banner
 {
@@ -22,19 +24,12 @@ class Banner
 
     public function getBanner($id)
     {
-        //独立验证
-        $data =[
-            'name' => 'vendor11111',
-            'email' => 'vendorqq.com'
-        ];
-      /*  $validate = new Validate([
-                'name' => 'require|max:10',
-                'email' => 'email'
-        ]);*/
-      $validate = new TestValidate();
-        $result = $validate->batch()->check($data);
-       var_dump($validate->getError());
+        (new IDMustBePostiveInt())->goCheck();
 
-        //验证器
+        $banner = BannerModel::getBannerByID($id);
+        if (!$banner){
+            throw new Exception('内部错误');
+        }
+        return $banner;
     }
 }
