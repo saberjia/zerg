@@ -23,7 +23,7 @@ class ExceptionHandler extends  Handle
 
     public function render(Exception $e)
     {
-        if ($e instanceof BannerMissException){
+        if ($e instanceof BaseException){
             //如果是自定义的异常
             $this->code =  $e->code;
             $this->msg = $e->msg;
